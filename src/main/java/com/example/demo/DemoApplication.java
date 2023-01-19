@@ -8,6 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tqtk.Entity.SessionEntity;
+import tqtk.Tqtk;
+import tqtk.XuLy.login.LayThongTinSession;
+
 @SpringBootApplication
 @RestController
 public class DemoApplication {
@@ -20,6 +24,19 @@ public class DemoApplication {
 	public String getCountUsers(){
 		count++;
 		return "Number of users = "+ count;
+	}
+	
+	@GetMapping("start")
+	public String start(){
+		if (LayThongTinSession.getListSession().size() < 1) {
+            Thread t = new Thread() {
+                public void run() {
+                    tqtk.Tqtk.main();
+                }
+            };
+            t.start();
+        }
+		return "ok";
 	}
 
 }
