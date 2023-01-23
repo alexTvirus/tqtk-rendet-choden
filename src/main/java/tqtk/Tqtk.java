@@ -39,15 +39,11 @@ public class Tqtk {
     public static void main() {
         // TODO code application logic here
         try {
-//            Properties pr = Util.loadProperties("user.properties");
-//            String value = "";
-//            String[] temp = new String[2];
-//            for (int i = 0; (value = pr.getProperty("user" + "." + i)) != null; i++) {
-//                temp = value.split("\\|");
-//                LayThongTinSession.getListSession().add(new SessionEntity(temp[0], temp[1]));
-//            }
-
-            LayThongTinSession.getListSession().add(new SessionEntity("n", "p"));
+            Properties pr = Util.loadProperties("user.properties");
+            String value = "";
+            for (int i = 0; (value = pr.getProperty("user" + "." + i)) != null; i++) {
+                LayThongTinSession.getListSession().add(new SessionEntity(value, "p"));
+            }
             
             List<SessionEntity> ss = LayThongTinSession.getListSession();
 

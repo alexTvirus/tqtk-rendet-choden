@@ -346,7 +346,7 @@ public class Util {
         //window
 //        String x = "D:\\7-Project\\Java\\1. Netbean\\2. nghien-cuu\\TQTK\\runshell\\"+file_name;
         //heroku
-        String x = "/app/" + file_name;
+        String x = "/" + file_name;
         try {
             final InputStream fin = new FileInputStream(x);
             pr.load(fin);
@@ -363,7 +363,7 @@ public class Util {
         //window
 //        String x = "D:\\7-Project\\Java\\1. Netbean\\2. nghien-cuu\\TQTK\\runshell\\cauhoi\\"+file_name;
         //heroku
-        String x = "/app/cauhoi/" + file_name;
+        String x = "/"+file_name;
         try {
             return Doc_file_kieu_txt.readFile(x);
         } catch (Exception e) {

@@ -10,6 +10,7 @@ RUN mvn clean package -DskipTests
 #
 FROM openjdk:11-jdk-slim
 COPY --from=build /target/demo-0.0.1-SNAPSHOT.jar demo.jar
-# ENV PORT=8080
-EXPOSE 8080
+COPY --from=build /user.properties user.properties
+# ENV PORT=8080 
+EXPOSE 8081
 ENTRYPOINT ["java","-Dfile.encoding=UTF-8","-jar","demo.jar"]
