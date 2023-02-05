@@ -8,6 +8,7 @@ package tqtk.Utils;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,11 +24,18 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import javax.net.ssl.HttpsURLConnection;
 import org.apache.commons.lang3.StringUtils;
 import tqtk.Entity.SessionEntity;
+import java.io.FileReader;
+import java.util.Iterator;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -357,21 +365,47 @@ public class Util {
         return pr;
     }
 
+    public static void setData(String file_name, List<SessionEntity> ss) {
+        org.json.simple.JSONObject jSONObject = null;
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jSONObjecttemp = null;
+        String x = "/" + file_name;
+        try (FileReader reader = new FileReader(x)) {
+            //Read JSON file
+            jSONObject = (org.json.simple.JSONObject) jsonParser.parse(reader);
+
+            JSONArray jSONArray = (JSONArray) jSONObject.get("accounts");
+
+            for (Iterator it = jSONArray.iterator(); it.hasNext();) {
+                jSONObject = (JSONObject) it.next();
+                SessionEntity s1 = new SessionEntity((String)jSONObject.get("UserId"), (String)jSONObject.get("UserId"));
+                s1.setIp((String)jSONObject.get("Ip"));
+                s1.setPorts(Integer.parseInt((String)jSONObject.get("Port")));
+                s1.setSessionKey((String)jSONObject.get("SessionKey"));
+                s1.setUserId((String)jSONObject.get("UserId"));
+                ss.add(s1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<String> docFileCauHoiThuThue(String file_name) {
 
         final Properties pr = new Properties();
         //window
 //        String x = "D:\\7-Project\\Java\\1. Netbean\\2. nghien-cuu\\TQTK\\runshell\\cauhoi\\"+file_name;
         //heroku
-        String x = "/"+file_name;
+        String x = "/" + file_name;
         try {
             return Doc_file_kieu_txt.readFile(x);
         } catch (Exception e) {
             return null;
         }
     }
-    
-        public String test2(String url) throws Exception {
+
+    public String test2(String url) throws Exception {
         HttpURLConnection con = null;
         try {
             URL obj = new URL(url);

@@ -5,6 +5,7 @@
  */
 package tqtk.XuLy;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,7 +13,9 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import org.apache.http.util.ByteArrayBuffer;
 import tqtk.Entity.SessionEntity;
 import tqtk.Utils.Util;
 
@@ -72,5 +75,48 @@ public class XuLyPacket {
             return null;
         }
 
+    }
+	
+	
+    public static String GuiPacket1(SessionEntity ss, String code, List<String> list) throws UnknownHostException, IOException, InterruptedException {
+        BufferedWriter wr = null;
+        String rp = "";
+        String message = "";
+        try {
+            message = Util.TaoMsg(code, list, ss);
+            Thread.sleep(3 * 1000);
+            wr = new BufferedWriter(new OutputStreamWriter(ss.getSocket().getOutputStream(), "UTF8"));
+            wr.write(message);
+            wr.flush();
+
+            if (ss.getSocket().isConnected()) {
+                Thread.sleep(3 * 1000);
+                BufferedInputStream bis = new BufferedInputStream(ss.getSocket().getInputStream());
+                ByteArrayBuffer baf = new ByteArrayBuffer(50);
+//                int buffSize = ss.getSocket().getReceiveBufferSize();
+                byte[] buffer = new byte[8192];
+                int read = 0;
+                while (true) {
+                    read = bis.read(buffer);
+                    if (read == -1) {
+                        break;
+                    }
+
+                    baf.append(buffer, 0, read);
+                    if (buffer[read - 1] == 5) {
+                        return new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8);
+                    }
+
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+//            if (e.getMessage().contains("socket write error")) {
+//            }
+            return null;
+        }
+        return rp;
     }
 }

@@ -39,13 +39,10 @@ public class Tqtk {
     public static void main() {
         // TODO code application logic here
         try {
-            Properties pr = Util.loadProperties("user.properties");
-            String value = "";
-            for (int i = 0; (value = pr.getProperty("user" + "." + i)) != null; i++) {
-                LayThongTinSession.getListSession().add(new SessionEntity(value, "p"));
-            }
             
             List<SessionEntity> ss = LayThongTinSession.getListSession();
+            
+            Util.setData("user.properties",ss);
 
             final ScheduledExecutorService executor = Executors.newScheduledThreadPool(ss.size());
             for (int i = 0; i < ss.size(); ++i) {
