@@ -18,6 +18,8 @@ import java.util.List;
 import org.apache.http.util.ByteArrayBuffer;
 import tqtk.Entity.SessionEntity;
 import tqtk.Utils.Util;
+import java.util.ArrayList;
+import tqtk.Entity.Params;
 
 /**
  *
@@ -76,6 +78,41 @@ public class XuLyPacket {
         }
 
     }
+	
+	public static StringBuilder GuiPacketApi(SessionEntity ss, String code, List<String> list) throws UnknownHostException, IOException, InterruptedException {
+        BufferedWriter wr = null;
+        StringBuilder rp = null;
+        String message = "";
+        try {
+            message = Util.TaoMsg(code, list, ss);
+            Thread.sleep(3 * 1000);
+            wr = new BufferedWriter(new OutputStreamWriter(ss.getSocketApi().getOutputStream(), "UTF8"));
+            wr.write(message);
+            wr.flush();
+
+            rp = new StringBuilder("");
+            if (ss.getSocketApi().isConnected()) {
+                Thread.sleep(3 * 1000);
+                InputStream instr = ss.getSocketApi().getInputStream();
+                int buffSize = ss.getSocketApi().getReceiveBufferSize();
+                if (buffSize > 0) {
+                    byte[] buff = new byte[buffSize];
+                    int ret_read = instr.read(buff);
+                    if (ret_read != -1) {
+                        rp.append(new String(buff, 0, ret_read));
+                    }
+                }
+            }
+            return rp;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+//            if (e.getMessage().contains("socket write error")) {
+//            }
+            return null;
+        }
+
+    }
 
     public static String GuiPacketHTTP(SessionEntity ss, String message) throws UnknownHostException, IOException, InterruptedException {
         BufferedWriter wr = null;
@@ -84,6 +121,125 @@ public class XuLyPacket {
             System.out.println("message " + message);
             wr = new BufferedWriter(new OutputStreamWriter(ss.getSocketApi().getOutputStream(), "UTF8"));
             wr.write(message);
+            wr.flush();
+
+            BufferedInputStream bis = new BufferedInputStream(ss.getSocketApi().getInputStream());
+            ByteArrayBuffer baf = new ByteArrayBuffer(50);
+            int read = 0;
+            int bufSize = 512;
+            byte[] buffer = new byte[bufSize];
+            rp = new StringBuilder("");
+            String tmp = "";
+            if (ss.getSocketApi().isConnected()) {
+                while (true) {
+                    read = bis.read(buffer);
+                    if (read == -1) {
+                        tmp = new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8);
+//                        System.out.println("-1 " + tmp);
+                        return tmp;
+                    }
+
+                    baf.append(buffer, 0, read);
+//                    System.out.println(new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8));
+                    if (baf.byteAt(baf.length() - 1) == 5) {
+                        tmp = new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8);
+                        return tmp;
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+//            if (e.getMessage().contains("socket write error")) {
+//            }
+        }
+        return "";
+    }
+
+    public static String GuiPacketHTTP1(SessionEntity ss, String message) throws UnknownHostException, IOException, InterruptedException {
+        BufferedWriter wr = null;
+        StringBuilder rp = null;
+        String message1 = "";
+        try {
+            System.out.println("message " + message);
+            String[] tmpa = message.split("-");
+            List<String> lists = new ArrayList<>();
+            if (tmpa.length > 1) {
+                for (String string : tmpa) {
+                    lists.add(string);
+                    lists.remove(0);
+                }
+            } else {
+                lists = null;
+            }
+
+            message1 = Util.TaoMsg(tmpa[0], lists, ss);
+            System.out.println("message1 " + message1);
+            wr = new BufferedWriter(new OutputStreamWriter(ss.getSocketApi().getOutputStream(), "UTF8"));
+            wr.write(message1);
+            wr.flush();
+
+            BufferedInputStream bis = new BufferedInputStream(ss.getSocketApi().getInputStream());
+            ByteArrayBuffer baf = new ByteArrayBuffer(50);
+            int read = 0;
+            int bufSize = 512;
+            byte[] buffer = new byte[bufSize];
+            rp = new StringBuilder("");
+            String tmp = "";
+            if (ss.getSocketApi().isConnected()) {
+                while (true) {
+                    read = bis.read(buffer);
+                    if (read == -1) {
+                        tmp = new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8);
+                        System.out.println("-1 " + tmp);
+                        return tmp;
+                    }
+
+                    baf.append(buffer, 0, read);
+                    System.out.println(new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8));
+                    if (baf.byteAt(baf.length() - 1) == 5) {
+                        tmp = new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8);
+                        return tmp;
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+//            if (e.getMessage().contains("socket write error")) {
+//            }
+        }
+        return "";
+    }
+
+    public static String GuiPacketHTTP2(SessionEntity ss, Params p) throws UnknownHostException, IOException, InterruptedException {
+        BufferedWriter wr = null;
+        StringBuilder rp = null;
+        String message1 = "";
+        try {
+            System.out.println("message ");
+            List<String> lists = new ArrayList<>();
+            if (p.getP1() != "") {
+                lists.add(p.getP1());
+            }
+            if (p.getP2() != "") {
+                lists.add(p.getP2());
+            }
+            if (p.getP3() != "") {
+                lists.add(p.getP3());
+            }
+            if (p.getP4() != "") {
+                lists.add(p.getP4());
+            }
+
+            lists = lists.size()>0 ? lists : null;
+
+            message1 = Util.TaoMsg(p.getCmd(), lists, ss);
+            System.out.println("message1 " + message1);
+            wr = new BufferedWriter(new OutputStreamWriter(ss.getSocketApi().getOutputStream(), "UTF8"));
+            wr.write(message1);
             wr.flush();
 
             BufferedInputStream bis = new BufferedInputStream(ss.getSocketApi().getInputStream());

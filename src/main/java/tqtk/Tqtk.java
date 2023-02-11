@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tqtk.Entity.SessionEntity;
+import tqtk.Utils.GetTextFromGit;
 import tqtk.Utils.Util;
 import tqtk.XuLy.Worker;
 import tqtk.XuLy.login.LayThongTinSession;
@@ -39,10 +40,11 @@ public class Tqtk {
     public static void main() {
         // TODO code application logic here
         try {
-            
+
             List<SessionEntity> ss = LayThongTinSession.getListSession();
-            
-            Util.setData("user.properties",ss);
+            String x = GetTextFromGit.getStringFromGithubRaw("https://raw.githubusercontent.com/alexTvirus/Static-Resource/main/user");
+            Util.setData1(x, ss);
+            //Util.setData("user.properties", ss);
 
             final ScheduledExecutorService executor = Executors.newScheduledThreadPool(ss.size());
             for (int i = 0; i < ss.size(); ++i) {
@@ -53,7 +55,7 @@ public class Tqtk {
             while (!executor.isTerminated()) {
             }
             System.out.println("tqtk.Tqtk.main()");
-            
+
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

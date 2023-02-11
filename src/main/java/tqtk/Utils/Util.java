@@ -391,6 +391,32 @@ public class Util {
         }
     }
 
+     public static void setData1(String content, List<SessionEntity> ss) {
+        org.json.simple.JSONObject jSONObject = null;
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jSONObjecttemp = null;
+        try {
+            //Read JSON file
+            jSONObject = (org.json.simple.JSONObject) jsonParser.parse(content);
+
+            JSONArray jSONArray = (JSONArray) jSONObject.get("accounts");
+
+            for (Iterator it = jSONArray.iterator(); it.hasNext();) {
+                jSONObject = (JSONObject) it.next();
+                SessionEntity s1 = new SessionEntity((String)jSONObject.get("UserId"), (String)jSONObject.get("UserId"));
+                s1.setIp((String)jSONObject.get("Ip"));
+                s1.setPorts(Integer.parseInt((String)jSONObject.get("Port")));
+                s1.setSessionKey((String)jSONObject.get("SessionKey"));
+                s1.setUserId((String)jSONObject.get("UserId"));
+                ss.add(s1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    
     public static List<String> docFileCauHoiThuThue(String file_name) {
 
         final Properties pr = new Properties();

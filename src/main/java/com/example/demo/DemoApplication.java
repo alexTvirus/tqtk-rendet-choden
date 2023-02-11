@@ -26,8 +26,11 @@ import java.io.Writer;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.context.ApplicationContext;
 import tqtk.Entity.SessionEntity;
+import tqtk.Entity.Params;
 import tqtk.Tqtk;
 import tqtk.XuLy.Worker;
 import tqtk.XuLy.XuLyPacket;
@@ -51,7 +54,7 @@ public class DemoApplication {
         for (int i = 0; i < ss.size(); ++i) {
             ss.get(i).getSocket().close();
             ss.get(i).getSocketApi().close();
-            }
+        }
         SpringApplication.exit(context);
         return "exit";
     }
@@ -82,10 +85,88 @@ public class DemoApplication {
         List<SessionEntity> ss = LayThongTinSession.getListSession();
         for (int i = 0; i < ss.size(); ++i) {
             if (id.equals(ss.get(i).getUserId())) {
-                return XuLyPacket.GuiPacketHTTP(ss.get(i), cmd);
+                XuLyPacket.GuiPacketHTTP(ss.get(i), cmd);
+                return "ok";
             }
         }
-        return "ok";
+        return "not-ok";
+    }
+
+    @RequestMapping(value = "/sendcmd1", method = RequestMethod.POST)
+    @ResponseBody
+    public String sendcmd1(@RequestBody Params cmd,
+            @RequestParam(value = "id", required = true) String id) throws IOException, UnknownHostException, InterruptedException {
+//        new Thread() {
+//            @Override
+//            public void run() {
+//                List<SessionEntity> ss = LayThongTinSession.getListSession();
+//                for (int i = 0; i < ss.size(); ++i) {
+//                    if (id.equals(ss.get(i).getUserId())) {
+//                        try {
+//                            XuLyPacket.GuiPacketHTTP2(ss.get(i), cmd);
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(DemoApplication.class.getName()).log(Level.SEVERE, null, ex);
+//                        } catch (InterruptedException ex) {
+//                            Logger.getLogger(DemoApplication.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                }
+//            }
+//        }.start();
+        List<SessionEntity> ss = LayThongTinSession.getListSession();
+        for (int i = 0; i < ss.size(); ++i) {
+            if (id.equals(ss.get(i).getUserId())) {
+                try {
+                    XuLyPacket.GuiPacketHTTP2(ss.get(i), cmd);
+                     return "ok";
+                } catch (IOException ex) {
+                    Logger.getLogger(DemoApplication.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DemoApplication.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return "not-ok";
+    }
+
+    @GetMapping("createSocket")
+    public String createSocket(@RequestParam(value = "id", required = true) String id) throws Exception {
+        String output = "";
+        List<SessionEntity> ss = LayThongTinSession.getListSession();
+        for (int i = 0; i < ss.size(); ++i) {
+            if (id.equals(ss.get(i).getUserId())) {
+                Worker.createSocket(ss.get(i));
+                return "ok";
+            }
+        }
+        return "not-ok";
+    }
+
+    @GetMapping("createSocketapi")
+    public String createSocketApi(@RequestParam(value = "id", required = true) String id) throws Exception {
+        String output = "";
+        List<SessionEntity> ss = LayThongTinSession.getListSession();
+        for (int i = 0; i < ss.size(); ++i) {
+            if (id.equals(ss.get(i).getUserId())) {
+                Worker.createSocketApi(ss.get(i));
+                return "ok";
+            }
+        }
+        return "not-ok";
+    }
+
+    @GetMapping("setSessionId")
+    public String setSessionId(@RequestParam(value = "id", required = true) String id,
+            @RequestParam(value = "session", required = true) String session) throws Exception {
+        String output = "";
+        List<SessionEntity> ss = LayThongTinSession.getListSession();
+        for (int i = 0; i < ss.size(); ++i) {
+            if (id.equals(ss.get(i).getUserId())) {
+                ss.get(i).setSessionKey(session);
+                return "ok";
+            }
+        }
+        return "not-ok";
     }
 
     @GetMapping("cmd")

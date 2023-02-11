@@ -22,6 +22,7 @@ import tqtk.Tqtk;
 import tqtk.Utils.Util;
 import tqtk.XuLy.login.LayThongTinSession;
 import static tqtk.XuLy.XuLyPacket.GuiPacket;
+import static tqtk.XuLy.XuLyPacket.GuiPacketApi;
 
 import static tqtk.XuLy.XuLyPacket.GuiPacketKhongKQ;
 import tqtk.exception.JsonException;
@@ -453,8 +454,7 @@ public class Worker extends Thread {
             //list1.set(0, "8");
             //Thread.sleep(5000);
             //GuiPacket(ss, "42200", list1);
-			
-			list1.set(0, "10");
+            list1.set(0, "10");
             Thread.sleep(5000);
             GuiPacket(ss, "42200", list1);
 
@@ -1114,6 +1114,49 @@ public class Worker extends Thread {
         ss.setSocketApi(socket1);
     }
 
+    public static void createSocket(SessionEntity session) throws Exception {
+        Socket socket1 = new Socket();
+        socket1.connect(new InetSocketAddress(InetAddress.getByName(session.getIp()), session.getPorts()), 7000);
+        socket1.setSoTimeout(350000);
+        try {
+            session.getSocketApi().close();
+        } catch (Exception e) {
+        }
+        session.setSocketApi(socket1);
+
+        Socket socket = new Socket();
+        socket.connect(new InetSocketAddress(InetAddress.getByName(session.getIp()), session.getPorts()), 7000);
+        socket.setSoTimeout(350000);
+        try {
+            session.getSocket().close();
+        } catch (Exception e) {
+        }
+        session.setSocket(socket);
+    }
+
+    public static void createSocketApi(SessionEntity session) throws Exception {
+        Socket socket1 = new Socket();
+        socket1.connect(new InetSocketAddress(InetAddress.getByName(session.getIp()), session.getPorts()), 7000);
+        socket1.setSoTimeout(350000);
+        try {
+            session.getSocketApi().close();
+        } catch (Exception e) {
+        }
+        session.setSocketApi(socket1);
+    }
+	
+	public void spamApi() {
+        List<String> list1 = new ArrayList<>();
+        list1.add(0, "1");
+        try {
+            list1.set(0, "1");
+            GuiPacketApi(ss, "49007", list1);
+
+        } catch (Exception e) {
+            System.out.println("NhanThuong " + ss.getStringName() + e.getMessage());
+        }
+    }
+
     @Override
     public void run() {
         try {
@@ -1121,7 +1164,7 @@ public class Worker extends Thread {
             GuiPacketDeLogin();
 
             while (true) {
-
+				spamApi();
                 MuaLinh();
 //                DanhQuanDoan1();
 //                DanhQuanDoan2();
