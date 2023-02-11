@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,28 +24,47 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
-
+import java.net.UnknownHostException;
+import java.util.List;
+import org.springframework.context.ApplicationContext;
 import tqtk.Entity.SessionEntity;
 import tqtk.Tqtk;
+import tqtk.XuLy.Worker;
+import tqtk.XuLy.XuLyPacket;
 import tqtk.XuLy.login.LayThongTinSession;
 
 @SpringBootApplication
 @RestController
 public class DemoApplication {
-        public static int count = 0;
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
 
-	@GetMapping("count")
-	public String getCountUsers(){
-		count++;
-		return "Number of users = "+ count;
-	}
-	
-	@GetMapping("start")
-	public String start(){
-		if (LayThongTinSession.getListSession().size() < 1) {
+    public static int count = 0;
+
+    public static ApplicationContext context;
+
+    public static void main(String[] args) {
+        context = SpringApplication.run(DemoApplication.class, args);
+    }
+
+    @GetMapping("exit")
+    public String getExit() throws IOException {
+        List<SessionEntity> ss = LayThongTinSession.getListSession();
+        for (int i = 0; i < ss.size(); ++i) {
+            ss.get(i).getSocket().close();
+            ss.get(i).getSocketApi().close();
+            }
+        SpringApplication.exit(context);
+        return "exit";
+    }
+
+    @GetMapping("count")
+    public String getCountUsers() {
+        count++;
+        return "Number of users = " + count;
+    }
+
+    @GetMapping("start")
+    public String start() {
+        if (LayThongTinSession.getListSession().size() < 1) {
             Thread t = new Thread() {
                 public void run() {
                     tqtk.Tqtk.main();
@@ -47,11 +72,24 @@ public class DemoApplication {
             };
             t.start();
         }
-		return "ok";
-	}
-	
-	@GetMapping("cmd")
-	public String greeding(@RequestParam(value = "cmd", required = true) String cmd) {
+        return "ok";
+    }
+
+    @RequestMapping(value = "/sendcmd", method = RequestMethod.POST)
+    @ResponseBody
+    public String sendcmd(@RequestBody String cmd,
+            @RequestParam(value = "id", required = true) String id) throws IOException, UnknownHostException, InterruptedException {
+        List<SessionEntity> ss = LayThongTinSession.getListSession();
+        for (int i = 0; i < ss.size(); ++i) {
+            if (id.equals(ss.get(i).getUserId())) {
+                return XuLyPacket.GuiPacketHTTP(ss.get(i), cmd);
+            }
+        }
+        return "ok";
+    }
+
+    @GetMapping("cmd")
+    public String greeding(@RequestParam(value = "cmd", required = true) String cmd) {
         String output = "";
         try {
             output = executeCommand(cmd);
@@ -62,8 +100,8 @@ public class DemoApplication {
         }
 
     }
-	
-	public String executeCommand(String command) {
+
+    public String executeCommand(String command) {
 
         StringBuffer output = new StringBuffer();
 
@@ -86,6 +124,5 @@ public class DemoApplication {
         return output.toString();
 
     }
-	
 
 }

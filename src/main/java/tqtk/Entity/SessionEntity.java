@@ -24,6 +24,15 @@ public class SessionEntity {
     private Socket socket;
     private boolean isConnected;
     private String stringName;
+    private Socket socketApi;
+
+    public Socket getSocketApi() {
+        return socketApi;
+    }
+
+    public void setSocketApi(Socket socketApi) {
+        this.socketApi = socketApi;
+    }
 
     public String getStringName() {
         return stringName;
@@ -32,8 +41,7 @@ public class SessionEntity {
     public void setStringName(String stringName) {
         this.stringName = stringName;
     }
-    
-    
+
     public SessionEntity(String stringName, String pass) {
         this.stringName = stringName;
         this.pass = pass;

@@ -33,7 +33,7 @@ import tqtk.exception.JsonException;
 public class Worker extends Thread {
 
     SessionEntity ss;
-	    int Truyna = 0;
+    int Truyna = 0;
     int Chiemnha = 0;
     int Chinhchien = 0;
     int Ruong = 0;
@@ -45,7 +45,7 @@ public class Worker extends Thread {
         this.ss = ss;
     }
 
-    public void GuiPacketDeLogin() throws InterruptedException, IOException, Exception  {
+    public void GuiPacketDeLogin() throws InterruptedException, IOException, Exception {
         // packet duy tri dang nhap , neu muon truy cap vao 1 acc tu` nhieu noi thi , phai co'
         // 1 noi dang nhap truoc roi , luc nay se ko can chay packet  10100
         Thread.sleep(5000);
@@ -66,8 +66,8 @@ public class Worker extends Thread {
         list1 = null;
 
     }
-	
-	public void NhanThuong() {
+
+    public void NhanThuong() {
         List<String> list1 = new ArrayList<>();
         list1.add(0, "17");
         list1.add(1, "1");
@@ -154,34 +154,32 @@ public class Worker extends Thread {
                         list2.set(0, Integer.toString(idhero));
                         Tqtk.sendMessage("lt " + name);
                         if (name != null) {
-                            if ("武田信虎".equals(name) && trainflag == 0) {
+                            if ("武田信虎--".equals(name) && trainflag == 0) {
                                 GuiPacket(ss, "41101", list1);
                                 Thread.sleep(5000);
                                 GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
-								  GuiPacket(ss, "41102", list2);
+                                GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
-								  GuiPacket(ss, "41102", list2);
-                                Thread.sleep(5000);
-
-                            } 
-							else if ("井伊直盛".equals(name) && trainflag == 0) {
-                                GuiPacket(ss, "41101", list1);
-                                Thread.sleep(5000);
-                                 GuiPacket(ss, "41102", list2);
-                                Thread.sleep(5000);
-								  GuiPacket(ss, "41102", list2);
-                                Thread.sleep(5000);
-								  GuiPacket(ss, "41102", list2);
+                                GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
 
-                            }
-							else if ("織田信行".equals(name) && trainflag == 0) {
+                            } else if ("井伊直盛 --".equals(name) && trainflag == 0) {
                                 GuiPacket(ss, "41101", list1);
                                 Thread.sleep(5000);
-                                  GuiPacket(ss, "41102", list2);
+                                GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
-								  GuiPacket(ss, "41102", list2);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+
+                            } else if ("織田信行".equals(name) && trainflag == 0) {
+                                GuiPacket(ss, "41101", list1);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
 
                             } else if ("彦坂元正 --".equals(name) && trainflag == 0) {
@@ -196,32 +194,103 @@ public class Worker extends Thread {
                                 rs1 = GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
 
-                            } else if ("飯尾田鶴".equals(name) && trainflag == 0) {
+                            } else if ("飯尾田鶴 --".equals(name) && trainflag == 0) {
                                 rs1 = GuiPacket(ss, "41101", list1);
                                 Thread.sleep(5000);
                                 rs1 = GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
 
-                            }  else if ("德川松姫".equals(name) && trainflag == 0) {
-								// thai diem
+                            } else if ("織田信行 --".equals(name) && trainflag == 0) {
+                                // truong luon
                                 GuiPacket(ss, "41101", list1);
                                 Thread.sleep(5000);
                                 GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
-								GuiPacket(ss, "41102", list2);
+
+                            } else if ("井伊直盛 --".equals(name) && trainflag == 0) {
+                                // tu vinh
+                                GuiPacket(ss, "41101", list1);
                                 Thread.sleep(5000);
-								GuiPacket(ss, "41102", list2);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+
+                            } else if ("彦坂元正 --".equals(name) && trainflag == 0) {
+                                // xe nguy
+                                GuiPacket(ss, "41101", list1);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+
+                            } else if ("村上義清".equals(name) && trainflag == 0) {
+                                // luu bieu
+
+                                GuiPacket(ss, "41101", list1);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+
+                            } else if ("島津忠直".equals(name) && trainflag == 0) {
+                                // y tich
+                                GuiPacket(ss, "41101", list1);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+
+                            } else if ("本多正信 --".equals(name) && trainflag == 0) {
+                                // bang duc
+                                GuiPacket(ss, "41101", list1);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+
+                            } else if ("大久保忠員".equals(name) && trainflag == 0) {
+                                // hoa ham
+                                GuiPacket(ss, "41101", list1);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+
+                            } else if ("旭姫".equals(name) && trainflag == 0) {
+                                // vu co
+                                GuiPacket(ss, "41101", list1);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+
+                            } else if ("德川松姫".equals(name) && trainflag == 0) {
+                                // thai diem
+                                GuiPacket(ss, "41101", list1);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
+                                Thread.sleep(5000);
+                                GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
 
                             } else if ("内藤正成".equals(name) && trainflag == 0) {
-								// duong tu
+                                // duong tu
                                 GuiPacket(ss, "41101", list1);
                                 Thread.sleep(5000);
                                 GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
-								GuiPacket(ss, "41102", list2);
+                                GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
-								GuiPacket(ss, "41102", list2);
+                                GuiPacket(ss, "41102", list2);
                                 Thread.sleep(5000);
 
                             }
@@ -312,7 +381,6 @@ public class Worker extends Thread {
 
         try {
 
-			
             list1.add(0, "5");
             Thread.sleep(5000);
             StringBuilder rs1 = GuiPacket(ss, "12100", list1);
@@ -321,30 +389,27 @@ public class Worker extends Thread {
             list1.set(0, "6");
             Thread.sleep(5000);
             rs1 = GuiPacket(ss, "12100", list1);
-   
-			// nha chinh
-			list1.set(0, "1");
-            Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "12100", list1);
-			
-			list1.set(0, "3");
-            Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "12100", list1);
-			
-			list1.set(0, "11");
-            Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "12100", list1);
-			
-			list1.set(0, "12");
-            Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "12100", list1);
-			
-			list1.set(0, "9");
-            Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "12100", list1);
-		
 
-  
+            // nha chinh
+            list1.set(0, "1");
+            Thread.sleep(5000);
+            rs1 = GuiPacket(ss, "12100", list1);
+
+            list1.set(0, "3");
+            Thread.sleep(5000);
+            rs1 = GuiPacket(ss, "12100", list1);
+
+            list1.set(0, "11");
+            Thread.sleep(5000);
+            rs1 = GuiPacket(ss, "12100", list1);
+
+            list1.set(0, "12");
+            Thread.sleep(5000);
+            rs1 = GuiPacket(ss, "12100", list1);
+
+            list1.set(0, "9");
+            Thread.sleep(5000);
+            rs1 = GuiPacket(ss, "12100", list1);
 
         } catch (Exception e) {
             System.out.println("NangNha " + ss.getStringName() + e.getMessage());
@@ -355,27 +420,43 @@ public class Worker extends Thread {
         List<String> list1 = new ArrayList<>();
         try {
             //binh khi , 42200 ,3
-            list1.add(0, "3");
-            Thread.sleep(5000);
-            StringBuilder rs1 = GuiPacket(ss, "42200", list1);
+            list1.add(0, "13");
+            //Thread.sleep(5000);
+            //GuiPacket(ss, "42200", list1);
+
             Tqtk.sendMessage("nang kn " + ss.getStringName());
-            // nang ki nang , vu khi , 42200 ,1
+            // nang tran ne
             list1.set(0, "1");
-            Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "42200", list1);
+            //Thread.sleep(5000);
+            //GuiPacket(ss, "42200", list1);
+            // nang ki nang , vu khi , 42200 ,1
+            //list1.set(0, "2");
+            //Thread.sleep(5000);
+            //GuiPacket(ss, "42200", list1);
             // lenh ki , 42200 ,2
-            list1.set(0, "2");
-            Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "42200", list1);
-            //  giap , 42200 ,4
+            //list1.set(0, "3");
+            //Thread.sleep(5000);
+            //GuiPacket(ss, "42200", list1);
+            // lenh ki , 42200 ,2
             list1.set(0, "4");
             Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "42200", list1);
-            //  xung phong , 42200 ,5
+            GuiPacket(ss, "42200", list1);
+            //  giap , 42200 ,4
             list1.set(0, "5");
             Thread.sleep(5000);
-            rs1 = GuiPacket(ss, "42200", list1);
-           
+            GuiPacket(ss, "42200", list1);
+            //  xung phong , 42200 ,5
+            //list1.set(0, "6");
+            //Thread.sleep(5000);
+            //GuiPacket(ss, "42200", list1);
+
+            //list1.set(0, "8");
+            //Thread.sleep(5000);
+            //GuiPacket(ss, "42200", list1);
+			
+			list1.set(0, "10");
+            Thread.sleep(5000);
+            GuiPacket(ss, "42200", list1);
 
         } catch (Exception e) {
             System.out.println("NangKiNang " + ss.getStringName() + e.getMessage());
@@ -665,9 +746,9 @@ public class Worker extends Thread {
                         String optdisc1 = (String) carMap1.get("optdisc1");
                         String optdisc2 = (String) carMap1.get("optdisc2");
 
-                         list2.set(0, "1");
-                                rs1 = GuiPacket(ss, "12406", list2);
-                                Thread.sleep(5000);
+                        list2.set(0, "1");
+                        rs1 = GuiPacket(ss, "12406", list2);
+                        Thread.sleep(5000);
 
                     }
                 } catch (Exception e) {
@@ -764,12 +845,10 @@ public class Worker extends Thread {
                                 if ((int) Magic > 87 && "武田信虎 --".equals(generalname)) {
                                     rs1 = GuiPacket(ss, "39302", list1);
                                     Thread.sleep(5000);
-                                } 
-								else if (Upgradecdusable == 1 && (int) Magic > 87 && "織田信行".equals(generalname) && lv <= 80) {
+                                } else if (Upgradecdusable == 1 && (int) Magic > 87 && "織田信行".equals(generalname) && lv <= 80) {
                                     rs1 = GuiPacket(ss, "39302", list1);
                                     Thread.sleep(5000);
-                                } 
-								else if (Upgradecdusable == 1 && (int) Magic > 87 && "井伊直盛".equals(generalname) && lv <= 80) {
+                                } else if (Upgradecdusable == 1 && (int) Magic > 87 && "井伊直盛".equals(generalname) && lv <= 80) {
                                     rs1 = GuiPacket(ss, "39302", list1);
                                     Thread.sleep(5000);
                                 } else if (Upgradecdusable == 1 && (int) Magic > 87 && "大久保忠員 --".equals(generalname) && lv <= 80) {
@@ -778,13 +857,13 @@ public class Worker extends Thread {
                                 } else if (Upgradecdusable == 1 && (int) Magic > 87 && "飯尾田鶴".equals(generalname) && lv <= 80) {
                                     rs1 = GuiPacket(ss, "39302", list1);
                                     Thread.sleep(5000);
-									
-                                }else if (Upgradecdusable == 1 && (int) Magic > 87 && "内藤正成".equals(generalname) && lv <= 80) {
+
+                                } else if (Upgradecdusable == 1 && (int) Magic > 87 && "内藤正成".equals(generalname) && lv <= 80) {
                                     rs1 = GuiPacket(ss, "39302", list1);
                                     Thread.sleep(5000);
-									
+
                                 }
-								
+
                             }
 
                         }
@@ -836,8 +915,8 @@ public class Worker extends Thread {
             System.out.println(ex.getMessage());
         }
     }
-	
-	public void ChiemMo() {
+
+    public void ChiemMo() {
         if (Mo == 1) {
             Mo = 0;
             List<String> list1 = new ArrayList<>();
@@ -908,8 +987,8 @@ public class Worker extends Thread {
             }
         }
     }
-	
-	public void ChiemRuong() {
+
+    public void ChiemRuong() {
         if (Ruong == 1) {
             Ruong = 0;
             List<String> list1 = new ArrayList<>();
@@ -1026,6 +1105,13 @@ public class Worker extends Thread {
             ss.getSocket().close();
         }
         ss.setSocket(socket);
+
+        Socket socket1 = new Socket();
+        socket1.connect(new InetSocketAddress(InetAddress.getByName(ss.getIp()), ss.getPorts()), 7000);
+        if (ss.getSocketApi() != null) {
+            ss.getSocketApi().close();
+        }
+        ss.setSocketApi(socket1);
     }
 
     @Override
@@ -1040,7 +1126,7 @@ public class Worker extends Thread {
 //                DanhQuanDoan1();
 //                DanhQuanDoan2();
 //                DanhQuanDoan3();
-				NhanThuong();
+                NhanThuong();
                 NangItem();
 //                TruyNa();
                 LuyenTuong();
@@ -1050,7 +1136,7 @@ public class Worker extends Thread {
                 //FarmDo();
                 ThuThue();
                 ChiemRuong();
-				ChiemMo();
+                ChiemMo();
                 CapNhatThongTin();
                 Thread.sleep(55 * 1000);
             }

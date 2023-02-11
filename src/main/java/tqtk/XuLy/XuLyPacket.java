@@ -76,8 +76,50 @@ public class XuLyPacket {
         }
 
     }
-	
-	
+
+    public static String GuiPacketHTTP(SessionEntity ss, String message) throws UnknownHostException, IOException, InterruptedException {
+        BufferedWriter wr = null;
+        StringBuilder rp = null;
+        try {
+            System.out.println("message " + message);
+            wr = new BufferedWriter(new OutputStreamWriter(ss.getSocketApi().getOutputStream(), "UTF8"));
+            wr.write(message);
+            wr.flush();
+
+            BufferedInputStream bis = new BufferedInputStream(ss.getSocketApi().getInputStream());
+            ByteArrayBuffer baf = new ByteArrayBuffer(50);
+            int read = 0;
+            int bufSize = 512;
+            byte[] buffer = new byte[bufSize];
+            rp = new StringBuilder("");
+            String tmp = "";
+            if (ss.getSocketApi().isConnected()) {
+                while (true) {
+                    read = bis.read(buffer);
+                    if (read == -1) {
+                        tmp = new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8);
+//                        System.out.println("-1 " + tmp);
+                        return tmp;
+                    }
+
+                    baf.append(buffer, 0, read);
+//                    System.out.println(new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8));
+                    if (baf.byteAt(baf.length() - 1) == 5) {
+                        tmp = new String(baf.buffer(), 0, baf.length(), StandardCharsets.UTF_8);
+                        return tmp;
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+//            if (e.getMessage().contains("socket write error")) {
+//            }
+        }
+        return "";
+    }
+
     public static String GuiPacket1(SessionEntity ss, String code, List<String> list) throws UnknownHostException, IOException, InterruptedException {
         BufferedWriter wr = null;
         String rp = "";
