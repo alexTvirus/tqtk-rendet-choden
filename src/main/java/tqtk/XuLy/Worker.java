@@ -25,6 +25,7 @@ import static tqtk.XuLy.XuLyPacket.GuiPacket;
 import static tqtk.XuLy.XuLyPacket.GuiPacketApi;
 
 import static tqtk.XuLy.XuLyPacket.GuiPacketKhongKQ;
+import static tqtk.XuLy.XuLyPacket.GuiPacketKhongKQApi;
 import tqtk.exception.JsonException;
 
 /**
@@ -1105,13 +1106,6 @@ public class Worker extends Thread {
             ss.getSocket().close();
         }
         ss.setSocket(socket);
-
-        Socket socket1 = new Socket();
-        socket1.connect(new InetSocketAddress(InetAddress.getByName(ss.getIp()), ss.getPorts()), 7000);
-        if (ss.getSocketApi() != null) {
-            ss.getSocketApi().close();
-        }
-        ss.setSocketApi(socket1);
     }
 
     public static void createSocket(SessionEntity session) throws Exception {
@@ -1143,6 +1137,47 @@ public class Worker extends Thread {
         } catch (Exception e) {
         }
         session.setSocketApi(socket1);
+		
+        Thread.sleep(2000);
+        GuiPacketKhongKQApi(session, "11102", null);
+        Thread.sleep(2000);
+        GuiPacketKhongKQApi(session, "52103", null);
+        Thread.sleep(2000);
+        GuiPacketKhongKQApi(session, "10108", null);
+        Thread.sleep(2000);
+        GuiPacketKhongKQApi(session, "20101", null);
+        Thread.sleep(2000);
+        List<String> list1 = new ArrayList<>();
+        list1.add(0, "1");
+        GuiPacketKhongKQApi(session, "12200", list1);
+        list1 = null;
+		
+    }
+	
+	public void createSocketApi1(SessionEntity session) throws Exception {
+        Socket socket1 = new Socket();
+        socket1.connect(new InetSocketAddress(InetAddress.getByName(session.getIp()), session.getPorts()), 7000);
+        socket1.setSoTimeout(350000);
+        try {
+            session.getSocketApi().close();
+        } catch (Exception e) {
+        }
+        session.setSocketApi(socket1);
+		
+        Thread.sleep(2000);
+        GuiPacketKhongKQApi(session, "11102", null);
+        Thread.sleep(2000);
+        GuiPacketKhongKQApi(session, "52103", null);
+        Thread.sleep(2000);
+        GuiPacketKhongKQApi(session, "10108", null);
+        Thread.sleep(2000);
+        GuiPacketKhongKQApi(session, "20101", null);
+        Thread.sleep(2000);
+        List<String> list1 = new ArrayList<>();
+        list1.add(0, "1");
+        GuiPacketKhongKQApi(session, "12200", list1);
+        list1 = null;
+		
     }
 	
 	public void spamApi() {
@@ -1162,7 +1197,7 @@ public class Worker extends Thread {
         try {
             dangNhapLayThongTin();
             GuiPacketDeLogin();
-
+			createSocketApi1(ss);
             while (true) {
 				spamApi();
                 MuaLinh();

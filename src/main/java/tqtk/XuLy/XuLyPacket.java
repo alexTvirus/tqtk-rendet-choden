@@ -26,6 +26,7 @@ import tqtk.Entity.Params;
  * @author Alex
  */
 public class XuLyPacket {
+	 private static Object lockPacketApi = new Object();
 
     public static void GuiPacketKhongKQ(SessionEntity ss, String code, List<String> list) throws UnknownHostException, IOException, InterruptedException {
         BufferedWriter wr = null;
@@ -39,6 +40,23 @@ public class XuLyPacket {
             System.out.println(e.getMessage());
 //            if (e.getMessage().contains("socket write error")) {
             ss.resetSocket();
+//            }
+        }
+
+    }
+	
+	 public static void GuiPacketKhongKQApi(SessionEntity ss, String code, List<String> list) throws UnknownHostException, IOException, InterruptedException {
+        BufferedWriter wr = null;
+        try {
+            String message = Util.TaoMsg(code, list, ss);
+            Thread.sleep(2 * 1000);
+            wr = new BufferedWriter(new OutputStreamWriter(ss.getSocketApi().getOutputStream(), "UTF8"));
+            wr.write(message);
+            wr.flush();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+//            if (e.getMessage().contains("socket write error")) {
+            //ss.resetSocket();
 //            }
         }
 
@@ -79,7 +97,9 @@ public class XuLyPacket {
 
     }
 	
-	public static StringBuilder GuiPacketApi(SessionEntity ss, String code, List<String> list) throws UnknownHostException, IOException, InterruptedException {
+	
+	
+	public static StringBuilder GuiPacketApi_b(SessionEntity ss, String code, List<String> list) throws UnknownHostException, IOException, InterruptedException {
         BufferedWriter wr = null;
         StringBuilder rp = null;
         String message = "";
@@ -214,7 +234,7 @@ public class XuLyPacket {
         return "";
     }
 
-    public static String GuiPacketHTTP2(SessionEntity ss, Params p) throws UnknownHostException, IOException, InterruptedException {
+    public static String GuiPacketHTTP2_b(SessionEntity ss, Params p) throws UnknownHostException, IOException, InterruptedException {
         BufferedWriter wr = null;
         StringBuilder rp = null;
         String message1 = "";
@@ -317,4 +337,88 @@ public class XuLyPacket {
         }
         return rp;
     }
+
+	    public static StringBuilder synGuiPacketApi(SessionEntity ss, String message) throws IOException {
+        synchronized (lockPacketApi) {
+            BufferedWriter wr = null;
+            StringBuilder rp = null;
+            try {
+                Thread.sleep(2 * 1000);
+                wr = new BufferedWriter(new OutputStreamWriter(ss.getSocketApi().getOutputStream(), "UTF8"));
+                wr.write(message);
+                wr.flush();
+
+                rp = new StringBuilder("");
+                if (ss.getSocketApi().isConnected()) {
+                    Thread.sleep(3 * 1000);
+                    InputStream instr = ss.getSocketApi().getInputStream();
+                    int buffSize = ss.getSocketApi().getReceiveBufferSize();
+                    if (buffSize > 0) {
+                        byte[] buff = new byte[buffSize];
+                        int ret_read = instr.read(buff);
+                        if (ret_read != -1) {
+                            rp.append(new String(buff, 0, ret_read));
+                        }
+                    }
+                }
+                return rp;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+
+//            if (e.getMessage().contains("socket write error")) {
+//            }
+                return null;
+            }
+        }
+
+    }
+
+    public static StringBuilder GuiPacketApi(SessionEntity ss, String code, List<String> list) throws UnknownHostException, IOException, InterruptedException {
+        StringBuilder rp = null;
+        try {
+            String message = "";
+            message = Util.TaoMsg(code, list, ss);
+            rp = synGuiPacketApi(ss, message);
+            return rp;
+        } catch (Exception ex) {
+            System.out.println("tqtk.XuLy.XuLyPacket.GuiPacketApi()");
+        } 
+        return null;
+
+    }
+
+    public static String GuiPacketHTTP2(SessionEntity ss, Params p) throws UnknownHostException, IOException, InterruptedException {
+        StringBuilder rp = null;
+        String message1 = "";
+        try {
+            List<String> lists = new ArrayList<>();
+            if (p.getP1() != "") {
+                lists.add(p.getP1());
+            }
+            if (p.getP2() != "") {
+                lists.add(p.getP2());
+            }
+            if (p.getP3() != "") {
+                lists.add(p.getP3());
+            }
+            if (p.getP4() != "") {
+                lists.add(p.getP4());
+            }
+
+            lists = lists.size() > 0 ? lists : null;
+
+            message1 = Util.TaoMsg(p.getCmd(), lists, ss);
+            System.out.println("message1 " + message1);
+            rp = synGuiPacketApi(ss, message1);
+            return rp.toString();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+//            if (e.getMessage().contains("socket write error")) {
+//            }
+        }
+        return "";
+    }
+
 }
