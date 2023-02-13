@@ -33,7 +33,9 @@ import tqtk.Entity.SessionEntity;
 import tqtk.Entity.Params;
 import tqtk.Tqtk;
 import tqtk.XuLy.Worker;
+import static tqtk.XuLy.Worker.isStopApi;
 import tqtk.XuLy.XuLyPacket;
+import static tqtk.XuLy.XuLyPacket.GuiPacketApi;
 import tqtk.XuLy.login.LayThongTinSession;
 
 @SpringBootApplication
@@ -118,7 +120,7 @@ public class DemoApplication {
             if (id.equals(ss.get(i).getUserId())) {
                 try {
                     XuLyPacket.GuiPacketHTTP2(ss.get(i), cmd);
-                     return "ok";
+                    return "ok";
                 } catch (IOException ex) {
                     Logger.getLogger(DemoApplication.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
@@ -167,6 +169,22 @@ public class DemoApplication {
             }
         }
         return "not-ok";
+    }
+
+    @GetMapping("stopApiSpam")
+    public String stopApiSpam() throws Exception {
+        synchronized (isStopApi) {
+            isStopApi = true;
+        }
+        return "ok";
+    }
+    
+      @GetMapping("startApiSpam")
+    public String startApiSpam() throws Exception {
+        synchronized (isStopApi) {
+            isStopApi = false;
+        }
+        return "ok";
     }
 
     @GetMapping("cmd")

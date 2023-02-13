@@ -42,6 +42,8 @@ public class Worker extends Thread {
     int Mo = 0;
     int areaId = 0;
 
+    public static Boolean isStopApi = false;
+
     public Worker(SessionEntity ss) {
 
         this.ss = ss;
@@ -1137,7 +1139,7 @@ public class Worker extends Thread {
         } catch (Exception e) {
         }
         session.setSocketApi(socket1);
-		
+
         Thread.sleep(2000);
         GuiPacketKhongKQApi(session, "11102", null);
         Thread.sleep(2000);
@@ -1151,44 +1153,56 @@ public class Worker extends Thread {
         list1.add(0, "1");
         GuiPacketKhongKQApi(session, "12200", list1);
         list1 = null;
-		
+
     }
-	
-	public void createSocketApi1(SessionEntity session) throws Exception {
+
+    public void createSocketApi1(SessionEntity session) throws Exception {
         Socket socket1 = new Socket();
+        socket1.setSoTimeout(350000000);
+        socket1.setKeepAlive(true);
         socket1.connect(new InetSocketAddress(InetAddress.getByName(session.getIp()), session.getPorts()), 7000);
-        socket1.setSoTimeout(350000);
+
         try {
             session.getSocketApi().close();
         } catch (Exception e) {
         }
         session.setSocketApi(socket1);
-		
-        Thread.sleep(2000);
+
+//        Thread.sleep(2000);
         GuiPacketKhongKQApi(session, "11102", null);
-        Thread.sleep(2000);
-        GuiPacketKhongKQApi(session, "52103", null);
-        Thread.sleep(2000);
-        GuiPacketKhongKQApi(session, "10108", null);
-        Thread.sleep(2000);
-        GuiPacketKhongKQApi(session, "20101", null);
-        Thread.sleep(2000);
-        List<String> list1 = new ArrayList<>();
-        list1.add(0, "1");
-        GuiPacketKhongKQApi(session, "12200", list1);
-        list1 = null;
-		
+//        Thread.sleep(2000);
+//        GuiPacketKhongKQApi(session, "52103", null);
+//        Thread.sleep(2000);
+//        GuiPacketKhongKQApi(session, "10108", null);
+//        Thread.sleep(2000);
+//        GuiPacketKhongKQApi(session, "20101", null);
+//        Thread.sleep(2000);
+//        List<String> list1 = new ArrayList<>();
+//        list1.add(0, "1");
+//        GuiPacketKhongKQApi(session, "12200", list1);
+//        list1 = null;
+
     }
-	
-	public void spamApi() {
-        List<String> list1 = new ArrayList<>();
-        list1.add(0, "1");
+
+    public void spamApi() {
+
         try {
-            list1.set(0, "1");
-            GuiPacketApi(ss, "49007", list1);
+            while (true) {
+                synchronized (isStopApi) {
+                    if (!isStopApi) {
+                        try {
+                            GuiPacketApi(ss, "11102", null);
+                        } catch (Exception e) {
+                             System.out.println("spamApi1 " + ss.getStringName() + e.getMessage());
+                        }
+
+                    }
+                }
+                Thread.sleep(40000);
+            }
 
         } catch (Exception e) {
-            System.out.println("NhanThuong " + ss.getStringName() + e.getMessage());
+            System.out.println("spamApi " + ss.getStringName() + e.getMessage());
         }
     }
 
@@ -1197,9 +1211,15 @@ public class Worker extends Thread {
         try {
             dangNhapLayThongTin();
             GuiPacketDeLogin();
-			createSocketApi1(ss);
+            createSocketApi1(ss);
+            new Thread() {
+                @Override
+                public void run() {
+                    spamApi();
+                }
+            }.start();
             while (true) {
-				spamApi();
+
                 MuaLinh();
 //                DanhQuanDoan1();
 //                DanhQuanDoan2();
@@ -1216,7 +1236,7 @@ public class Worker extends Thread {
                 ChiemRuong();
                 ChiemMo();
                 CapNhatThongTin();
-                Thread.sleep(55 * 1000);
+                Thread.sleep(40 * 1000);
             }
         } catch (Exception ex) {
             System.out.println("all " + ss.getStringName() + ex.getMessage());
