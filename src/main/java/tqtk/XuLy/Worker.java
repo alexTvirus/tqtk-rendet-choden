@@ -1078,7 +1078,7 @@ public class Worker extends Thread {
                         }
                     }
                     Object player = (Object) ((Map<String, Object>) carMap.get("m")).get("player");
-
+                    System.out.println("CapNhatThongTin " + ss.getStringName());
                     Truyna = (int) ((Map<Object, Object>) player).get("extragongji");
                     Chinhchien = (int) ((Map<Object, Object>) player).get("extrazhengzhan");
                     Ruong = (int) ((Map<Object, Object>) player).get("extranongtian");
@@ -1211,30 +1211,9 @@ public class Worker extends Thread {
         try {
             dangNhapLayThongTin();
             GuiPacketDeLogin();
-            createSocketApi1(ss);
-            new Thread() {
-                @Override
-                public void run() {
-                    spamApi();
-                }
-            }.start();
             while (true) {
 
-                MuaLinh();
-//                DanhQuanDoan1();
-//                DanhQuanDoan2();
-//                DanhQuanDoan3();
-                NhanThuong();
-                NangItem();
-//                TruyNa();
-                LuyenTuong();
-                NangNha();
-                NangKiNang();
-//                GianKhoan();
-                //FarmDo();
-                ThuThue();
-                ChiemRuong();
-                ChiemMo();
+    
                 CapNhatThongTin();
                 Thread.sleep(40 * 1000);
             }
