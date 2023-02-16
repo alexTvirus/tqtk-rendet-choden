@@ -1205,6 +1205,80 @@ public class Worker extends Thread {
             System.out.println("spamApi " + ss.getStringName() + e.getMessage());
         }
     }
+    
+    public void ChoDen() throws IOException, UnknownHostException, InterruptedException, Exception {
+        List<String> list1 = new ArrayList<>();
+        list1.add(0, "0");
+        list1.add(1, "0");
+        list1.add(2, "0");
+        list1.add(3, "0");
+        try {
+            Thread.sleep(5000);
+            StringBuilder rs1 = GuiPacket(ss, "48116", list1);
+            if (rs1 != null && rs1.toString() != "") {
+                try {
+                    String[] temp = rs1.toString().split("");
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    Map<String, Object> carMap = null;
+                    int h = 0;
+                    for (String string : temp) {
+                        carMap = mapper.readValue(string, new TypeReference<Map<String, Object>>() {
+                        });
+                        h = (int) carMap.get("h");
+                        if (h == Integer.parseInt("48116")) {
+                            break;
+                        }
+                    }
+                    List<Object> carMap1 = (List<Object>) ((Map<String, Object>) carMap.get("m")).get("goods");
+                       System.out.println("cho den " + ss.getStringName());
+                    Integer costType = 0;
+                    Integer cost = 0;
+                    String name = "";
+                    Integer modelId = 0;
+                    Integer goodsIndex = 0;
+
+                    Tqtk.sendMessage("cho den " + ss.getStringName());
+                    list1.remove(3);
+                    list1.remove(2);
+                    for (Object object : carMap1) {
+                        costType = (int) ((Map<Object, Object>) object).get("costType");
+                        cost = (int) ((Map<Object, Object>) object).get("cost");
+                        name = (String) ((Map<Object, Object>) object).get("name");
+                        goodsIndex = (int) ((Map<Object, Object>) object).get("goodsIndex");
+                        modelId = (int) ((Map<Object, Object>) object).get("modelId");
+                        //Tqtk.sendMessage(lv + " " + name + " " + storeid + " " + generalname);
+                        if (name.contains("羽")
+                                && costType == 2
+                                && 20000 < cost ) {
+                            list1.set(0, Integer.toString(modelId));
+                            list1.set(1, Integer.toString(goodsIndex));
+                            GuiPacket(ss, "48118", list1);
+                        }
+
+                        if (name.contains("兜")
+                                && costType == 2
+                                && 20000 < cost ) {
+                            list1.set(0, Integer.toString(modelId));
+                            list1.set(1, Integer.toString(goodsIndex));
+                            GuiPacket(ss, "48118", list1);
+                        }
+                    }
+                } catch (Exception e) {
+                    throw new JsonException();
+                }
+            }
+        } catch (Exception ex) {
+            if (!(ex instanceof JsonException)) {
+                System.out.println("cho den " + ss.getStringName() + ex.getMessage());
+             
+            } else {
+                System.out.println("cho den json " + ss.getStringName() + ex.getMessage());
+            }
+
+        }
+
+    }
 
     @Override
     public void run() {
@@ -1212,10 +1286,9 @@ public class Worker extends Thread {
             dangNhapLayThongTin();
             GuiPacketDeLogin();
             while (true) {
-
-    
-                CapNhatThongTin();
+                ChoDen();
                 Thread.sleep(40 * 1000);
+                CapNhatThongTin();
             }
         } catch (Exception ex) {
             System.out.println("all " + ss.getStringName() + ex.getMessage());
