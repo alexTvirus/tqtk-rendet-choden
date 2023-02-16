@@ -42,7 +42,7 @@ public class Tqtk {
         try {
 
             List<SessionEntity> ss = LayThongTinSession.getListSession();
-            String x = GetTextFromGit.getStringFromGithubRaw("https://raw.githubusercontent.com/alexTvirus/Static-Resource/main/user");
+            String x = GetTextFromGit.getStringFromGithubRaw("https://raw.githubusercontent.com/alexTvirus/Static-Resource/main/choden");
             Util.setData1(x, ss);
             //Util.setData("user.properties", ss);
 
